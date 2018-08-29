@@ -21,6 +21,17 @@ function printenv () {
   Get-ChildItem Env:
 }
 
+function debugON($value) {
+  $value = $($value + '*')
+  $env:DEBUG = $value
+  Write-Output $env:DEBUG
+}
+
+function debugOFF() {
+  $env:DEBUG = ""
+  Write-Output $env:DEBUG
+}
+
 ############################################################
 # Git                                                      #
 ############################################################
