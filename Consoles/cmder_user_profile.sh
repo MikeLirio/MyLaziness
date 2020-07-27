@@ -30,7 +30,12 @@
 ## CHANGE LOG #################################################################################
 ###############################################################################################
 #
-# Actual Version v1.0
+# Actual Version v1.1
+# 
+# Change Log v1.1
+#	- Added openLiferayEnv to executes openLiferayDev - openLiferayDeploy - openLiferayOsgi
+#	  functions.
+#	- Updated mc_everis functions to v1.s to v1.2.
 #
 # Change Log v1.0
 #       - Added goDocker function.
@@ -120,7 +125,7 @@ function everis () {
 }
 
 function mc_everis () {
-    echo "############# mc_everis Functions v1.1"
+    echo "############# mc_everis Functions v1.2"
     echo "liferayOn          -   start Liferay 7.2"
     echo "liferayOff         -   stop  Liferay 7.2"
     echo "liferayDeploy      -   Mv the content of /CREWPORTAL/bundles/osgi/modules to liferay/deploy folder"
@@ -142,6 +147,7 @@ function mc_everis () {
     echo "openLiferayDeploy  -   open folder ${LIFERAY_PATH}/deploy on explorer"
     echo "openLiferayOsgi    -   open folder ${LIFERAY_PATH}/osgi/modules on explorer"
     echo "openTomcat         -   open folder ${LIFERAY_TOMCAT_PATH} on explorer"
+    echo "openLiferayEnv     -   executes openLiferayDev - openLiferayDeploy - openLiferayOsgi functions."
 }
 
 function goLiferay () {
@@ -187,6 +193,12 @@ function openLiferayDeploy () {
 
 function openLiferayOsgi () {
     start ${LIFERAY_PATH}/osgi/modules
+}
+
+function openLiferayEnv () {
+    openLiferayDev
+    openLiferayDeploy
+    openLiferayOsgi
 }
 
 function liferayCleanOsgi () {
