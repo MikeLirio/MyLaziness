@@ -30,8 +30,13 @@
 ## CHANGE LOG #################################################################################
 ###############################################################################################
 #
-# Actual Version v1.1
+# Actual Version v1.2
 # 
+# Change Log v1.2
+#       - Added funcion debugOn and debugOff on lirio.
+#       - Liferay functions are pending to be fixed.
+#       - Lirio functions version 1.1
+#
 # Change Log v1.1
 #	- Added openLiferayEnv to executes openLiferayDev - openLiferayDeploy - openLiferayOsgi
 #	  functions.
@@ -55,6 +60,7 @@ export MY_LAZINESS=${DEV_PATH}/MyLaziness
 
 export DEV_PATH=/e/Desarrollo
 export DEV_LIFERAY=${DEV_PATH}/liferay/mcdonalds
+export LIFERAY_MCDONALD=${DEV_LIFERAY}/ourloungecloud/liferay/bundles/osgi/modules
 export LIFERAY_PATH=${DEV_PATH}/liferay/liferay_7.2.SP2
 export LIFERAY_TOMCAT_PATH=${LIFERAY_PATH}/tomcat-9.0.33
 
@@ -68,13 +74,32 @@ function lirio () {
     echo "lirio               -   List of function on Cmdr configuration."
     echo "everis              -   List all everis functions"
     echo "mc_everis           -   List of funcions related with McDonald's project and Liferay 7.2 in local."
-    echo "############# lirio Functions v1.0"
+    echo "############# lirio Functions v1.1"
     echo "editProfile         -   Edit the Cmdr configuration of bash_profile."
     echo "reloadProfile       -   Reload the profile avoiding to restart the terminal."
     echo "goDocker            -   cd ${DEV_PATH}/docker"
     echo "saveCmder           -   store the user_profile.sh of Cmder on MyLazyness repository."
     echo "loadCmder           -   load from MyLazyness repository the user_profile.sh of Cmder."
+    echo "debugOn pattern     -   set Environment Variable {DEBUG} in '*'. Pattern is a variable that you can concatenate with *"
+    echo "debugOff            -   set Environment Variable {DEBUG} with value ''"
     everis
+}
+
+function debugOn() {
+    echo "Activating DEBUG"
+    if [ -z "$1" ]; then
+       export DEBUG=*
+       printenv DEBUG
+    else
+       local service=$1
+       export DEBUG="$service*"
+       printenv DEBUG
+    fi
+}
+
+function debugOff() {
+   echo "Deactivating DEBUG"
+   unset DEBUG
 }
 
 function editProfile () {
@@ -125,7 +150,7 @@ function everis () {
 }
 
 function mc_everis () {
-    echo "############# mc_everis Functions v1.2"
+    echo "############# mc_everis Functions v1.3"
     echo "liferayOn          -   start Liferay 7.2"
     echo "liferayOff         -   stop  Liferay 7.2"
     echo "liferayDeploy      -   Mv the content of /CREWPORTAL/bundles/osgi/modules to liferay/deploy folder"
@@ -156,7 +181,8 @@ function goLiferay () {
 }
 
 function goLiferayDev () {
-    cd ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules
+    # cd ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules
+    cd ${LIFERAY_MCDONALD}
     pwd
 }
 
@@ -180,7 +206,8 @@ function openLiferay () {
 }
 
 function openLiferayDev () {
-    start ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules
+    # start ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules
+    start ${LIFERAY_MCDONALD}
 }
 
 function openTomcat () {
@@ -210,6 +237,7 @@ function liferayCleanDev () {
     echo "Removing elements from ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules/*.jar"
     rm ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules/*.jar
 }
+
 
 function liferayDeploy () {
     echo "Moving elements from ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules to ${LIFERAY_PATH}/deploy"
