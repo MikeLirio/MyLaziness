@@ -30,8 +30,13 @@
 ## CHANGE LOG #################################################################################
 ###############################################################################################
 #
-# Actual Version v1.2
+# Actual Version v1.3
 # 
+# Change Log v1.3
+#       - Added liferayDatabaseON to start the Docker container of mysql related 
+#         McDonald Project.
+#       - Added DEV_LIFERAY_DATABASE variable used on previous function.
+#
 # Change Log v1.2
 #       - Added funcion debugOn and debugOff on lirio.
 #       - Liferay functions are pending to be fixed.
@@ -53,15 +58,16 @@
 ## ENVIRONMENT VARIABLE #######################################################################
 ###############################################################################################
 
-export JAVA_HOME="/c/Program Files/Java/jdk1.8.0_251/bin"
+export JAVA_HOME="/c/Program Files/Java/jdk1.8.0_251"
 export JRE_HOME="/c/Program Files/Java/jdk1.8.0_251/jre"
 
 export MY_LAZINESS=${DEV_PATH}/MyLaziness
 
 export DEV_PATH=/e/Desarrollo
-export DEV_LIFERAY=${DEV_PATH}/liferay/mcdonalds
+export DEV_LIFERAY=${DEV_PATH}/everis-liferay/mcdonalds
+export DEV_LIFERAY_DATABASE=${DEV_LIFERAY}/database
 export LIFERAY_MCDONALD=${DEV_LIFERAY}/ourloungecloud/liferay/bundles/osgi/modules
-export LIFERAY_PATH=${DEV_PATH}/liferay/liferay_7.2.SP2
+export LIFERAY_PATH=${DEV_PATH}/everis-liferay/liferay_7.2.SP2
 export LIFERAY_TOMCAT_PATH=${LIFERAY_PATH}/tomcat-9.0.33
 
 ###############################################################################################
@@ -141,18 +147,23 @@ function loadCmder () {
 }
 
 ###############################################################################################
-################## Everis functions for Liferay McDonald - 2020 07 16 #########################
+################## Everis functions for Liferay McDonald ######################################
 ###############################################################################################
 
 function everis () {
-    echo "############# everis Functions v1.0"
+    echo "############# everis Functions"
     mc_everis
 }
 
 function mc_everis () {
-    echo "############# mc_everis Functions v1.3"
+    echo "############# mc_everis Functions"
+    echo "############# Bugs and improvements"
+    echo "# Need of removing all paths from description and use variables"
+    echo "# Liferay paths are being changed. Need to be updated to work properly"
+    echo "#############"
     echo "liferayOn          -   start Liferay 7.2"
     echo "liferayOff         -   stop  Liferay 7.2"
+    echo "liferayDatabaseOn  -   start the Docker container with mysql and the schema used in Local"
     echo "liferayDeploy      -   Mv the content of /CREWPORTAL/bundles/osgi/modules to liferay/deploy folder"
     echo "liferayClean       -   clean the content of liferay app."
     echo "liferayCleanOn     -   executes liferayClean and after liferayOn"
@@ -162,17 +173,22 @@ function mc_everis () {
     echo "catalinaLogs       -   show logs of catalina: ${LIFERAY_TOMCAT_PATH}/logs/catalina.out"
     echo "########################## Using 'cd' to some Path"
     echo "goLiferay          -   cd ${LIFERAY_PATH}"
-    echo "goLiferayDev       -   cd ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules"
+    echo "goLiferayDev       -   cd ${DEV_LIFERAY}/bundles/osgi/modules"
     echo "goLiferayDeploy    -   cd ${LIFERAY_PATH}/deploy"
     echo "goLiferayOsgi      -   cd ${LIFERAY_PATH}/osgi/modules"
     echo "goTomcat           -   cd ${LIFERAY_TOMCAT_PATH}"
     echo "########################## Open explorer on Windows"
     echo "openLiferay        -   open folder ${LIFERAY_PATH} on explorer"
-    echo "openLiferayDev     -   open folder ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules on explorer"
+    echo "openLiferayDev     -   open folder ${DEV_LIFERAY}/bundles/osgi/modules on explorer"
     echo "openLiferayDeploy  -   open folder ${LIFERAY_PATH}/deploy on explorer"
     echo "openLiferayOsgi    -   open folder ${LIFERAY_PATH}/osgi/modules on explorer"
     echo "openTomcat         -   open folder ${LIFERAY_TOMCAT_PATH} on explorer"
     echo "openLiferayEnv     -   executes openLiferayDev - openLiferayDeploy - openLiferayOsgi functions."
+}
+
+function liferayDatabaseOn () {
+    cd ${DEV_LIFERAY_DATABASE}
+    docker-compose up
 }
 
 function goLiferay () {
@@ -181,7 +197,6 @@ function goLiferay () {
 }
 
 function goLiferayDev () {
-    # cd ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules
     cd ${LIFERAY_MCDONALD}
     pwd
 }
@@ -206,7 +221,6 @@ function openLiferay () {
 }
 
 function openLiferayDev () {
-    # start ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules
     start ${LIFERAY_MCDONALD}
 }
 
@@ -229,21 +243,24 @@ function openLiferayEnv () {
 }
 
 function liferayCleanOsgi () {
-    echo "Removing elements from ${LIFERAY_PATH}/osgi/modules/*.jar"
-    rm ${LIFERAY_PATH}/osgi/modules/*.jar
+    echo "This has to be rechecked"
+    # echo "Removing elements from ${LIFERAY_PATH}/osgi/modules/*.jar"
+    # rm ${LIFERAY_PATH}/osgi/modules/*.jar
 }
 
 function liferayCleanDev () {
-    echo "Removing elements from ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules/*.jar"
-    rm ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules/*.jar
+    echo "This has to be rechecked"
+    # echo "Removing elements from ${DEV_LIFERAY}/bundles/osgi/modules/*.jar"
+    # rm ${DEV_LIFERAY}/bundles/osgi/modules/*.jar
 }
 
 
 function liferayDeploy () {
-    echo "Moving elements from ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules to ${LIFERAY_PATH}/deploy"
-    echo "ls ${DEV_LIFERAY}/crewportal/CREWPORTAL/bundles/osgi/modules"
-    ls ${DEV_PATH}/liferay/mcdonalds/crewportal/CREWPORTAL/bundles/osgi/modules
-    cp ${DEV_PATH}/liferay/mcdonalds/crewportal/CREWPORTAL/bundles/osgi/modules/* ${LIFERAY_PATH}/deploy
+    echo "This has to be rechecked"
+    # echo "Moving elements from ${DEV_LIFERAY}/osgi/modules to ${LIFERAY_PATH}/deploy"
+    # echo "ls ${DEV_LIFERAY}/bundles/osgi/modules"
+    # ls ${DEV_PATH}/bundles/osgi/modules
+    # cp ${DEV_PATH}/bundles/osgi/modules/* ${LIFERAY_PATH}/deploy
 }
 
 function liferayOn () {
