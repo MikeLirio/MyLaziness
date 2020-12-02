@@ -85,7 +85,7 @@ export BASH_PROFILE_VERSION=1.6
 # Variables use on Docker configuration
 export AWS_DOCKER="${MY_LAZINESS}/docker/aws-cli"
 export AWS_DOCKER_CONFIG="${AWS_DOCKER}/.aws"
-export AWS_DOCKER_HELPER="${MY_LAZINESS}/helper"
+export AWS_DOCKER_HELPER="${AWS_DOCKER}/helper"
 
 ###############################################################################################
 ## ENVIRONMENT VARIABLE - EVERIS ##############################################################
@@ -187,7 +187,7 @@ function printLirioEnv () {
 function printLirioAlias () {
     echo "alias ls => ls -la"
     echo "alias ojete => echo calor! "
-    echo "alias aws => docker run --rm -ti -v ${AWS_DOCKER_CONFIG}:/root/.aws -v ${AWS_DOCKER_HELPER}:/aws amazon/aws-cli "
+    echo "alias aws => docker run --rm -ti -v ${AWS_DOCKER_CONFIG}:/root/.aws -v ${AWS_DOCKER_HELPER}:/aws amazon/aws-cli"
 }
 
 function goDocker () {
