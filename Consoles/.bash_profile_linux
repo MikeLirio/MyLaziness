@@ -29,6 +29,11 @@
 ###############################################################################################
 ## CHANGE LOG #################################################################################
 ###############################################################################################
+# Change Log v1.6
+#      - Added variables for Docker management. 
+#      - Added management of AWS-CLI with Docker.
+#      - Upgrade on function. Create printLirioEnv and printLirioAlias
+#
 # Change Log v1.5
 #       - Refactoring and fix some variables.
 #       - Added new function goDev and importProfile from MyLazyness GitHub Repo.
@@ -68,13 +73,19 @@
 export JAVA_HOME="/mnt/c/Program Files/Java/jdk1.8.0_271"
 export JRE_HOME="/mnt/c/Program Files/Java/jdk1.8.0_271/jre"
 
-export BASH_PROFILE="${LINUX_HOME}/.bash_profile"
-export BASH_PROFILE_VERSION=1.5
-export MY_LAZINESS=${DEV_PATH}/MyLaziness
-
+export LINUX_HOME="/home/lirio"
 export DEV_PATH="/mnt/j/Desarrollo"
 
-export LINUX_HOME="/home/lirio"
+export GITHUB_PATH="${DEV_PATH}/github"
+export MY_LAZINESS="${GITHUB_PATH}/MyLaziness"
+
+export BASH_PROFILE="${LINUX_HOME}/.bash_profile"
+export BASH_PROFILE_VERSION=1.6
+
+# Variables use on Docker configuration
+export AWS_DOCKER="${MY_LAZINESS}/docker/aws-cli"
+export AWS_DOCKER_CONFIG="${AWS_DOCKER}/.aws"
+export AWS_DOCKER_HELPER="${MY_LAZINESS}/helper"
 
 ###############################################################################################
 ## ENVIRONMENT VARIABLE - EVERIS ##############################################################
@@ -104,6 +115,8 @@ function lirio () {
     echo " everis              -   List all everis functions"
     echo " mc_everis           -   List of functions related with McDonald's project and Liferay 7.2 in local."
     echo -e "\n############# Lirio Functions"
+    echo " printLirioEnv       -   Like printenv but with the variables of this file."
+    echo " printLirioAlias     -   Print all the alias declared on this file."
     echo " editProfile         -   Edit the bash_profile."
     echo " importProfile       -   Import and load the ${MY_LAZINESS}/Consoles/.bash_profile_linux file."
     echo " reloadProfile       -   Reload the profile avoiding to restart the terminal."
@@ -114,7 +127,7 @@ function lirio () {
     echo " debugOn pattern     -   set Environment Variable {DEBUG} in '*'. Pattern is a variable that you can concatenate with *"
     echo " debugOff            -   set Environment Variable {DEBUG} with value ''"
     echo -e "\n############# Aliases"
-    echo " ls                  -   ls -la"
+    printLirioAlias
     echo -e ""
 }
 
@@ -141,13 +154,40 @@ function editProfile () {
     reloadProfile
 }
 
+function reloadProfile () {
+    source ${BASH_PROFILE}
+}
+
 function importProfile {
     cp ${MY_LAZINESS}/Consoles/.bash_profile_linux ${LINUX_HOME}/.bash_profile
     reloadProfile
 }
 
-function reloadProfile () {
-    source ${BASH_PROFILE}
+function printLirioEnv () {
+    echo "## ENVIRONMENT VARIABLE - LIRIO"
+    echo "JAVA_HOME : ${JAVA_HOME}"
+    echo "JRE_HOME : ${JRE_HOME}"
+    echo "BASH_PROFILE : ${BASH_PROFILE}"
+    echo "BASH_PROFILE_VERSION : ${BASH_PROFILE_VERSION}"
+    echo "GITHUB_PATH : ${GITHUB_PATH}"
+    echo "MY_LAZINESS : ${MY_LAZINESS}"
+    echo "DEV_PATH : ${DEV_PATH}"
+    echo "AWS_DOCKER : ${AWS_DOCKER}"
+    echo "AWS_DOCKER_CONFIG : ${AWS_DOCKER_CONFIG}"
+    echo "AWS_DOCKER_HELPER : ${AWS_DOCKER_HELPER}"
+    echo "LINUX_HOME : ${LINUX_HOME}"
+    echo -e "## ENVIRONMENT VARIABLE - EVERIS"
+    echo "DEV_LIFERAY : ${DEV_LIFERAY}"
+    echo "DEV_LIFERAY_DATABASE : ${DEV_LIFERAY_DATABASE}"
+    echo "LIFERAY_MCDONALD : ${LIFERAY_MCDONALD}"
+    echo "LIFERAY_PATH : ${LIFERAY_PATH}"
+    echo "LIFERAY_TOMCAT_PATH : ${LIFERAY_TOMCAT_PATH}"
+}
+
+function printLirioAlias () {
+    echo "alias ls => ls -la"
+    echo "alias ojete => echo calor! "
+    echo "alias aws => docker run --rm -ti -v ${AWS_DOCKER_CONFIG}:/root/.aws -v ${AWS_DOCKER_HELPER}:/aws amazon/aws-cli "
 }
 
 function goDocker () {
@@ -324,10 +364,10 @@ function liferayClean () {
     # echo "Removing ${LIFERAY_PATH}/work/*"
     # rm -r work/*
 
-    echo "Removing ${LIFERAY_TOMCAT_PATH}/temp/*"
-    rm -r ${LIFERAY_TOMCAT_PATH}/temp/*
-    echo "Removing ${LIFERAY_TOMCAT_PATH}/work/Catalina/*"
-    rm -r ${LIFERAY_TOMCAT_PATH}/work/Catalina/*
+    # echo "Removing ${LIFERAY_TOMCAT_PATH}/temp/*"
+    # rm -r ${LIFERAY_TOMCAT_PATH}/temp/*
+    # echo "Removing ${LIFERAY_TOMCAT_PATH}/work/Catalina/*"
+    # rm -r ${LIFERAY_TOMCAT_PATH}/work/Catalina/*
 
     # Server mode
     # sh /opt/liferay/tomcat-7.0.62/bin/everis.clean.liferay.sh
