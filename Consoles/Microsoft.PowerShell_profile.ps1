@@ -1,6 +1,12 @@
 ###############################################################################################
 ## CHANGE LOG #################################################################################
 ###############################################################################################
+# Change Log v1.1
+#       - Update on AWS. It request you to select a credentials to execute the aws commands.
+#         This configuration is linked with where is located the repository <MyLazyness>.
+#       - openProfile renamed to editProfile. Bash and Powershell profile has the same name.
+#       - Change on debugOn/Off the writer from Writer-Output to Writer-Host.
+#
 # Change Log v1.0
 #       - Beginning of having track on Powershell Profile.
 #       - Migrating behaviors already code in bash_profiles for linux.
@@ -10,16 +16,20 @@
 ###############################################################################################
 ## ENVIRONMENT VARIABLE - LIRIO ###############################################################
 ###############################################################################################
-$env:PROFILE_VERSION="1.0"
+$env:PROFILE_VERSION="1.1"
 
 $env:DEV_PATH = "J:\Desarrollo"
 
 $env:GITHUB_PATH = $env:DEV_PATH + "\github"
 $env:MY_LAZINESS = $env:GITHUB_PATH + "\MyLaziness"
 
-# Variables use on Docker configuration
+# Variable that contains the user selected to load their credentials.
+$env:AWS_DOCKER_USER
+# Path in docker format where this repo is cloned. This HAVE TO BE change after clonning this.
 $env:AWS_DOCKER = "//j/Desarrollo/github/MyLaziness/docker/aws-cli"
-$env:AWS_DOCKER_CONFIG = "$env:AWS_DOCKER/.aws"
+# Path where the users credentials have to be inserted.
+$env:AWS_DOCKER_CONFIG = "$env:AWS_DOCKER/users"
+# Path of the generic volume to work with aws-cli
 $env:AWS_DOCKER_HELPER = "$env:AWS_DOCKER/helper"
 
 $env:test = "calor"
@@ -50,7 +60,7 @@ function lirio () {
     "",
     "   ############# Lirio Functions",
     "",
-    "   openProfile           -   Open the actual Profile in VS Code.",
+    "   editProfile           -   Open the actual Profile in VS Code.",
     "   ov                    -   Open a file with VS Code.",
     "   goDev                 -   Go to path $env:DEV_PATH.",
     "   reloadProfile         -   Reload the actual profile.",
@@ -88,11 +98,12 @@ function printLirioEnv () {
     "MY_LAZINESS  = $env:MY_LAZINESS ",
     "AWS_DOCKER  = $env:AWS_DOCKER ",
     "AWS_DOCKER_CONFIG  = $env:AWS_DOCKER_CONFIG ",
-    "AWS_DOCKER_HELPER  = $env:AWS_DOCKER_HELPER "
+    "AWS_DOCKER_HELPER  = $env:AWS_DOCKER_HELPER ",
+    "AWS_DOCKER_USER  = $env:AWS_DOCKER_USER "
   ) -Separator "`r`n"
 }
 
-function openProfile () {
+function editProfile () {
   Write-Host "opening $PROFILE"
   & code $PROFILE
 }
@@ -119,12 +130,12 @@ function printenv () {
 function debugON($value) {
   $value = $($value + '*')
   $env:DEBUG = $value
-  Write-Output "Setting the debug with the value of $env:DEBUG"
+  Write-Host "Setting the debug with the value of $env:DEBUG"
 }
 
 function debugOFF() {
   $env:DEBUG = ""
-  Write-Output $env:DEBUG
+  Write-Host $env:DEBUG
 }
 
 function cat($file) {
@@ -135,10 +146,37 @@ function gitStatus() {
   git status
 }
 
+function setUserAWS () {
+  $usersAWS = @{ 
+    "0" = "none"
+    "1" = "sysadmin_widget" 
+  }
+
+  Write-Host "Choose which user want to use:"
+  $usersAWS
+
+  [uint16]$selected = Read-Host -Prompt "Select the name of the user you want to use on AWS. Example; 0."
+
+  if ($selected -eq 0) {
+    $env:AWS_DOCKER_USER = ""
+    Write-Host "No user selected. AWS_DOCKER_USER = <${env:AWS_DOCKER_USER}>"
+  } elseif ($selected -ge $usersAWS.count) {
+    $env:AWS_DOCKER_USER = ""
+    Write-Host "There is not any credential with that value."
+  } else {
+    $env:AWS_DOCKER_USER = $usersAWS[[string]$selected]
+    Write-Host "The name selected is $selected. The user <${env:AWS_DOCKER_USER}> will be used."
+  }
+}
+
 # https://stackoverflow.com/questions/2468145/equivalent-to-bash-alias-in-powershell
-function aws {  
-  Write-Host "Executing: docker run --rm -ti -v ${env:AWS_DOCKER_CONFIG}:/root/.aws -v ${env:AWS_DOCKER_HELPER}:/aws amazon/aws-cli:latest $args"
-  docker run --rm -ti -v ${env:AWS_DOCKER_CONFIG}:/root/.aws -v ${env:AWS_DOCKER_HELPER}:/aws amazon/aws-cli:latest $args
+function aws {
+  if ([string]::IsNullOrEmpty($env:AWS_DOCKER_USER)) {
+    setUserAWS
+  }
+  $configPath = "${env:AWS_DOCKER_CONFIG}/${env:AWS_DOCKER_USER}"
+  Write-Host "Executing: docker run --rm -ti -v ${configPath}:/root/.aws -v ${env:AWS_DOCKER_HELPER}:/aws amazon/aws-cli:latest $args"
+  docker run --rm -ti -v ${configPath}:/root/.aws -v ${env:AWS_DOCKER_HELPER}:/aws amazon/aws-cli:latest $args
 }
 
 ###############################################################################################
