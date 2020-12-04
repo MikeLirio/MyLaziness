@@ -51,3 +51,29 @@ $env:AWS_DOCKER_CONFIG = "$env:AWS_DOCKER/users"
 $env:AWS_DOCKER_HELPER = "$env:AWS_DOCKER/helper"
 ```
 
+### AWS-DEV
+
+It container a `docker-compose.yml` file and a `dockerfile` that provides me an environment to study for the [AWS Certified Developer - Associate Certification by Malcolm Orr](https://learning.oreilly.com/videos/aws-certified-developer/9781789616118/). 
+
+It generates an image called **aws-dev** with python and aws-cli installed inside. Also it copy the credentials from `docker/aws-cli/users/sysadmin-widget` on it. 
+
+### MYSQL
+
+It created and start a **MySQL 5.7** database with 2 volumes.
+
+* `docker/mysql/volume`: this is optional. It will contain all the info of the schemas. 
+* `docker/mysql/schemas`: This volume has to contain all the schemas that you want to add on the container. More info below to import or export schemas.
+
+```bash
+# Summary of my Docker MySQL configuration
+# MYSQL_ROOT_PASSWORD: sudo_mlv
+# MYSQL_DATABASE: mikes_schema
+# MYSQL_USER: mike
+# MYSQL_PASSWORD: mlv
+
+# To IMPORT a schema. You have to have a schema already created
+$ sudo mysql -u ${USER} -p -h ${HOST TO EXPORT} -p name_of_schema < /path/of/schema/schema_to_import.sql
+# To EXPORT a schema
+$ sudo mysqldump --set-gtid-purged=OFF -u ${USER} -h ${HOST TO EXPORT} -p name_of_schema > /path/of/schema/exported_schema.sql
+```
+

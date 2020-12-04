@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+   aws-dev: # remember to run it at < $docker-compose run aws-dev bash >
+    build:
+      context: ../
+      dockerfile: ./aws-dev/dockerfile
+    image: aws-dev-img
+    # stdin_open: true  # docker run -i
+    # tty: true         # docker run -t
+    container_name: aws-dev
+    volumes:
+        - /j/Desarrollo/github/MyLaziness/docker/sharefolder:/home/lirio

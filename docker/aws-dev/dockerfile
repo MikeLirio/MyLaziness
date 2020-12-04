@@ -1,0 +1,19 @@
+FROM ubuntu:latest
+
+RUN apt-get update \
+    && apt install -y \
+        python3-pip \
+        wget \
+    && pip3 install --user --upgrade awscli \
+    && pip3 install virtualenv \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV PATH="/root/.local/bin:${PATH}"
+
+RUN mkdir /root/.aws
+# Copy the credentials from the aws-cli folder.
+# Note that when you just clone the repo, the credentials are not set
+COPY ./aws-cli/users/sysadmin_widget/* /root/.aws/
+
+RUN mkdir -p /home/lirio
+WORKDIR /home/lirio
