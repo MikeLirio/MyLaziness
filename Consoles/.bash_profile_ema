@@ -1,0 +1,158 @@
+###############################################################################################
+## COLORS FOR ECHO \\\\\\\\\\\\\\\\\\##########################################################
+###############################################################################################
+
+BLUE='\033[0;34m' 
+YELLOW='\033[0;33m'  
+GREEN='\033[0;32m' 
+RED='\033[0;31m' 
+NC='\033[0m'        # No Color
+
+###############################################################################################
+
+export BASH_PROFILE_VERSION=1.0
+export BASH_PROFILE="/home/lirio/.bash_profile"
+export BASH_PROFILE_TO_LOAD="/mnt/c/Users/liriovillenm/Workspace/MyLaziness/Consoles/.bash_profile_ema"
+export DEV_PATH="/c/Users/liriovillenm/.bashrc/Workspace/EMA"
+
+###############################################################################################
+## ENVIRONMENT VARIABLE - ADR-ZSETUP ##########################################################
+###############################################################################################
+
+export WB_RG = ""
+export WB_APP = ""
+export WB_SA = ""
+export WB_SNET = ""
+export NW_RG = ""
+export NW_VNET = ""
+export CS_RG = ""
+export CS_ACCOUNT = ""
+export SB = ""
+
+export APP_MESSAGING_SYSTEM_PASSWORD = ""
+export APP_MESSAGING_SYSTEM_USERNAME = ""
+export APP_SHAREPOINT_PASSWORD = ""
+export APP_SHAREPOINT_USERID = ""
+export APP_SPOR_API_OMS_PASSWORD = ""
+export APP_SPOR_API_OMS_USERNAME = ""
+export DOCKER_REGISTRY_SERVER_USERNAME = ""
+export DOCKER_REGISTRY_SERVER_PASSWORD = ""
+export SPRING_DATA_MONGODB_DATABASE = ""
+# export SPRING_DATA_MONGODB_URI = ""
+export SPRING_DATA_MONGODB_URI = ""
+
+export ADR_WEB_V = ""
+export ADR_WEB_UI_V = ""
+export ENV = ""
+
+export EAUTH_CLIENT_ID = ""
+export EAUTH_TOKEN_ISSUER_URL = ""
+export EAUTH_CLIENT_SECRET = ""
+
+# Connectivity Validation Step
+# Password of the Docker Container Registry in Azure
+export DCR_PWD = ""
+# MongoDB URI
+export APP_MONGODB_URI = ""
+
+
+###############################################################################################
+## ALIAS ######################################################################################
+###############################################################################################
+
+alias ls="ls -la"
+alias ojete="echo \"calor!\""
+
+###############################################################################################
+## FUNCTIONS ##################################################################################
+###############################################################################################
+
+function lirio () {
+    echo "Lirio Documentation v${BASH_PROFILE_VERSION}. Functions defined on ${BASH_PROFILE}"
+    echo -e "\n############# List of Functions"
+    echo " lirio               -   List of functions in .bash_profile."
+    echo -e "\n############# Lirio Functions"
+    echo " editProfile         -   Edit the .bashrc."
+    echo " reloadProfile       -   Reload the profile avoiding to restart the terminal."
+    echo " goDev               -   cd ${DEV_PATH}"
+    echo " debugOn pattern     -   set Environment Variable {DEBUG} in '*'. Pattern is a variable that you can concatenate with *"
+    echo " debugOff            -   set Environment Variable {DEBUG} with value ''"
+    echo " printAzSetup        -   print the values variables for adr-zsetup"
+    echo -e ""
+}
+
+function printAzSetup () {
+    echo -e "${GREEN}Printing variables that are used on adr-azsetup${NC}"
+    echo -e "${BLUE}WB_RG${NC} = ${YELLOW}${WB_RG}${NC}"
+    echo -e "${BLUE}WB_APP${NC} = ${YELLOW}${WB_APP}${NC}"
+    echo -e "${BLUE}WB_SA${NC} = ${YELLOW}${WB_SA}${NC}"
+    echo -e "${BLUE}WB_SNET${NC} = ${YELLOW}${WB_SNET}${NC}"
+    echo -e "${BLUE}NW_RG${NC} = ${YELLOW}${NW_RG}${NC}"
+    echo -e "${BLUE}NW_VNET${NC} = ${YELLOW}${NW_VNET}${NC}"
+    echo -e "${BLUE}CS_RG${NC} = ${YELLOW}${CS_RG}${NC}"
+    echo -e "${BLUE}CS_ACCOUNT${NC} = ${YELLOW}${CS_ACCOUNT}${NC}"
+    echo -e "${BLUE}SB${NC} = ${YELLOW}${SB}${NC}"
+    echo -e ""
+    echo -e "${GREEN}For validation step${NC}"
+    echo -e "${BLUE}DCR_PWD${NC} = ${YELLOW}${DCR_PWD}${NC}"
+    echo -e "${BLUE}APP_MONGODB_URI${NC} = ${YELLOW}${APP_MONGODB_URI}${NC}"
+    echo -e ""
+    echo -e "${GREEN}Container settings${NC}"
+    echo -e "${BLUE}APP_MESSAGING_SYSTEM_PASSWORD${NC} = ${YELLOW}${APP_MESSAGING_SYSTEM_PASSWORD}${NC}"
+    echo -e "${BLUE}APP_MESSAGING_SYSTEM_USERNAME${NC} = ${YELLOW}${APP_MESSAGING_SYSTEM_USERNAME}${NC}"
+    echo -e "${BLUE}APP_SHAREPOINT_PASSWORD${NC} = ${YELLOW}${APP_SHAREPOINT_PASSWORD}${NC}"
+    echo -e "${BLUE}APP_SHAREPOINT_USERID${NC} = ${YELLOW}${APP_SHAREPOINT_USERID}${NC}"
+    echo -e "${BLUE}APP_SPOR_API_OMS_PASSWORD${NC} = ${YELLOW}${APP_SPOR_API_OMS_PASSWORD}${NC}"
+    echo -e "${BLUE}APP_SPOR_API_OMS_USERNAME${NC} = ${YELLOW}${APP_SPOR_API_OMS_USERNAME}${NC}"
+    echo -e "${BLUE}DOCKER_REGISTRY_SERVER_USERNAME${NC} = ${YELLOW}${DOCKER_REGISTRY_SERVER_USERNAME}${NC}"
+    echo -e "${BLUE}DOCKER_REGISTRY_SERVER_PASSWORD${NC} = ${YELLOW}${DOCKER_REGISTRY_SERVER_PASSWORD}${NC}"
+    echo -e "${BLUE}SPRING_DATA_MONGODB_DATABASE${NC} = ${YELLOW}${SPRING_DATA_MONGODB_DATABASE}${NC}"
+    echo -e "${BLUE}SPRING_DATA_MONGODB_URI${NC} = ${YELLOW}${SPRING_DATA_MONGODB_URI}${NC}"
+    echo -e ""
+    echo -e "${GREEN}Version and environment${NC}"
+    echo -e "${BLUE}ADR_WEB_V${NC} = ${YELLOW}${ADR_WEB_V}${NC}"
+    echo -e "${BLUE}ADR_WEB_UI_V${NC} = ${YELLOW}${ADR_WEB_UI_V}${NC}"
+    echo -e "${BLUE}ENV${NC} = ${YELLOW}${ENV}${NC}"
+    echo -e ""
+    echo -e "${GREEN}EasyAuth configuration${NC}"
+    echo -e "${BLUE}EAUTH_CLIENT_ID${NC} = ${YELLOW}${EAUTH_CLIENT_ID}${NC}"
+    echo -e "${BLUE}EAUTH_TOKEN_ISSUER_URL${NC} = ${YELLOW}${EAUTH_TOKEN_ISSUER_URL}${NC}"
+    echo -e "${BLUE}EAUTH_CLIENT_SECRET${NC} = ${YELLOW}${EAUTH_CLIENT_SECRET}${NC}"
+    echo -e ""
+}
+
+function goDev () {
+    cd ${DEV_PATH}
+}
+
+function debugOn() {
+    echo "Activating DEBUG"
+    if [ -z "$1" ]; then
+       export DEBUG=*
+       printenv DEBUG
+    else
+       local service=$1
+       export DEBUG="$service*"
+       printenv DEBUG
+    fi
+}
+
+function debugOff() {
+   echo "Deactivating DEBUG"
+   unset DEBUG
+}
+
+function loadProfile () {
+    cp ${BASH_PROFILE_TO_LOAD} ${BASH_PROFILE}
+    reloadProfile
+}
+
+function editProfile () {
+    sudo vi ${BASH_PROFILE}
+    echo "Reloading the user_profile.sh file."
+    reloadProfile
+}
+
+function reloadProfile () {
+    source ${BASH_PROFILE}
+}
